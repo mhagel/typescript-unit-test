@@ -1,12 +1,12 @@
 namespace spec.app.components.people {
-    import PeopleController = app.components.people.IPeopleController;
+    import IPeopleController = app.components.people.IPeopleController;
 
     describe('HelloWorld', () => {
         describe('People Component', () => {
 
             var $compile:ng.ICompileService;
             var $scope:ng.IScope;
-            var dataservice; //need type
+            var dataservice:void;
 
             beforeEach(angular.mock.module('app.components.people'));
 
@@ -20,9 +20,9 @@ namespace spec.app.components.people {
                 var compiledElement:ng.IAugmentedJQuery;
                 var controller:IPeopleController;
                 var isolateScope:ng.IScope;
-                var persons:ng.IAugmentedJQuery = [
+                var persons:[any] = [
                     { id: 6, firstName: 'Landon', lastName: 'Gates', age: 11, location: 'South Carolina' },
-                    { id: 7, firstName: 'Haley', lastName: 'Guthrie', age: 35, location: 'Wyoming' },
+                    { id: 7, firstName: 'Haley', lastName: 'Guthrie', age: 35, location: 'Wyoming' }
                 ];
 
                 beforeEach(() => {

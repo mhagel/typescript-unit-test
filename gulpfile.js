@@ -7,6 +7,7 @@ var del = require('del');
 var fs = require('fs');
 var glob = require('glob');
 var gulp = require('gulp');
+var jasmine = require('gulp-jasmine');
 var merge = require('merge2');
 var path = require('path');
 var cp = require('child_process');
@@ -254,7 +255,7 @@ gulp.task('build-specs', ['templatecache'], function(done) {
  * This is separate so we can run tests on
  * optimize before handling image or fonts
  */
-gulp.task('build', ['optimize', 'images', 'fonts'], function() {
+gulp.task('build', ['fonts'], function() {
     log('Building everything');
 
     var msg = {
@@ -369,7 +370,7 @@ gulp.task('clean-code', function(done) {
  *    gulp test --startServers
  * @return {Stream}
  */
-gulp.task('test', ['vet', 'tsc', 'templatecache'], function(done) {
+gulp.task('test', ['templatecache'], function(done) {
     startTests(true /*singleRun*/ , done);
 });
 
@@ -404,6 +405,11 @@ gulp.task('debug', ['inject'], function () {
  */
 gulp.task('serve-build', ['build'], function() {
     serve(false /*isDev*/);
+});
+
+gulp.task('test:jasmine', function () {
+    return gulp.src('src/**/*.spec.js')
+        .pipe(jasmine([verbose = true]));
 });
 
 /**
@@ -638,8 +644,11 @@ function startTests(singleRun, done) {
     var child;
     var excludeFiles = [];
     var fork = require('child_process').fork;
+    var jasmine = require('gulp-jasmine');
     var karma = require('karma').server;
     var serverSpecs = config.serverIntegrationSpecs;
+
+
 
     if (args.startServers) {
         log('Starting servers');
@@ -652,6 +661,8 @@ function startTests(singleRun, done) {
             excludeFiles = serverSpecs;
         }
     }
+
+
 
     karma.start({
         configFile: __dirname + '/karma.conf.js',
@@ -673,6 +684,7 @@ function startTests(singleRun, done) {
             done();
         }
     }
+
 }
 
 /**
